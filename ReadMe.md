@@ -1,6 +1,6 @@
 # To Do App
 
-Build out a ToDo App in React
+Sample ToDo App in React using CodeSandbox
 
 ## Feature
 
