@@ -5,19 +5,23 @@ import {
   Checkbox,
   Form,
   FormLayout,
-  TextField
+  TextField,
 } from "@shopify/polaris";
 import { ToDo } from "./types";
 
-export const ToDoForm = ({ onSubmit }) => {
+interface Props {
+  onSubmit: (todo: ToDo) => void;
+}
+
+export const ToDoForm = ({ onSubmit }: Props) => {
   const [todo, setTodo] = useState<ToDo>({
-    title: ""
+    title: "",
   });
   const [showError, setShowError] = useState(false);
 
   const resetForm = () => {
     setTodo({
-      title: ""
+      title: "",
     });
     setShowError(false);
   };
@@ -47,7 +51,7 @@ export const ToDoForm = ({ onSubmit }) => {
           onChange={(value) => {
             setTodo({
               ...todo,
-              title: value
+              title: value,
             });
           }}
           label="Title"
@@ -57,7 +61,7 @@ export const ToDoForm = ({ onSubmit }) => {
           onChange={(value) => {
             setTodo({
               ...todo,
-              description: value
+              description: value,
             });
           }}
           label="Description"
@@ -68,7 +72,7 @@ export const ToDoForm = ({ onSubmit }) => {
           onChange={(value) => {
             setTodo({
               ...todo,
-              completed: value
+              completed: value,
             });
           }}
         />
