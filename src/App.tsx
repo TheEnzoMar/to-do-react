@@ -1,124 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import enTranslations from "@shopify/polaris/locales/en.json";
-import {
-  AppProvider,
-  Banner,
-  Button,
-  Card,
-  Checkbox,
-  Form,
-  FormLayout,
-  Layout,
-  List,
-  Page,
-  TextField
-} from "@shopify/polaris";
-import { ToDo } from "./types";
+import { AppProvider } from "@shopify/polaris";
+import { ToDosList } from "./ToDosList";
 import "./styles.css";
-
-const ToDoForm = ({ onSubmit }) => {
-  const [todo, setTodo] = useState<ToDo>({
-    title: ""
-  });
-  const [showError, setShowError] = useState(false);
-
-  const resetForm = () => {
-    setTodo({
-      title: ""
-    });
-    setShowError(false);
-  };
-
-  const validate = () => {
-    return todo.title !== "";
-  };
-
-  return (
-    <Form
-      onSubmit={() => {
-        const valid = validate();
-
-        if (!valid) {
-          setShowError(true);
-          return;
-        }
-
-        onSubmit(todo);
-        resetForm();
-      }}
-    >
-      <FormLayout>
-        {showError && <Banner status="critical">Invalid ToDo</Banner>}
-        <TextField
-          value={todo.title}
-          onChange={(value) => {
-            setTodo({
-              ...todo,
-              title: value
-            });
-          }}
-          label="Title"
-        />
-        <TextField
-          value={todo.description}
-          onChange={(value) => {
-            setTodo({
-              ...todo,
-              description: value
-            });
-          }}
-          label="Description"
-        />
-        <Checkbox
-          checked={todo.completed}
-          label="Completed"
-          onChange={(value) => {
-            setTodo({
-              ...todo,
-              completed: value
-            });
-          }}
-        />
-        <Button submit>Add</Button>
-      </FormLayout>
-    </Form>
-  );
-};
-
-const ToDoList = () => {
-  const [todos, setTodos] = useState<ToDo[]>([
-    {
-      title: "First ToDo"
-    }
-  ]);
-
-  const createToDo = (todo: ToDo) => {
-    const newToDos = [...todos, todo];
-    setTodos(newToDos);
-  };
-
-  return (
-    <Page title="To Dos">
-      <Layout sectioned>
-        <Card sectioned>
-          <ToDoForm onSubmit={createToDo} />
-        </Card>
-        <Card sectioned>
-          <List>
-            {todos.map((todo, i) => {
-              return <List.Item key={i}>{todo.title}</List.Item>;
-            })}
-          </List>
-        </Card>
-      </Layout>
-    </Page>
-  );
-};
 
 export default function App() {
   return (
     <AppProvider i18n={enTranslations}>
-      <ToDoList />
+      <ToDosList />
     </AppProvider>
   );
 }
