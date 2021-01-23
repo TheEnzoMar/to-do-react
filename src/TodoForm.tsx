@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Banner,
   Button,
@@ -6,28 +6,26 @@ import {
   Form,
   FormLayout,
   TextField,
-} from "@shopify/polaris";
-import { ToDo } from "./types";
+} from '@shopify/polaris';
+import { Todo } from './types';
 
 interface Props {
-  onSubmit: (todo: ToDo) => void;
+  onSubmit: (todo: Todo) => void;
 }
 
-export const ToDoForm = ({ onSubmit }: Props) => {
-  const [todo, setTodo] = useState<ToDo>({
-    title: "",
+export const TodoForm = ({ onSubmit }: Props) => {
+  const [todo, setTodo] = useState<Todo>({
+    title: '',
   });
   const [showError, setShowError] = useState(false);
 
   const resetForm = () => {
-    setTodo({
-      title: "",
-    });
+    setTodo({ title: '' });
     setShowError(false);
   };
 
   const validate = () => {
-    return todo.title !== "";
+    return todo.title !== '';
   };
 
   return (
@@ -45,7 +43,7 @@ export const ToDoForm = ({ onSubmit }: Props) => {
       }}
     >
       <FormLayout>
-        {showError && <Banner status="critical">Invalid ToDo</Banner>}
+        {showError && <Banner status="critical">Invalid Todo</Banner>}
         <TextField
           value={todo.title}
           onChange={(value) => {
