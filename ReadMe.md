@@ -33,7 +33,7 @@ ToDo List
 
 ## Models
 
-## ToDo
+## Todo
 
 - title
 - description
