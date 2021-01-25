@@ -16,7 +16,7 @@ export const TodoList = ({ todos, toggleTodo }: Props) => {
 
         return (
           <ResourceItem
-            id={todo.id}
+            id={todo.id || ''}
             onClick={() => {}}
             shortcutActions={[
               { content: 'Toggle', onAction: () => toggleTodo(todo.id) },
