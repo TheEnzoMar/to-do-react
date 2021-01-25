@@ -1,17 +1,33 @@
-import React, { useState } from 'react';
-import { List } from '@shopify/polaris';
+import React from 'react';
+import { ResourceItem, ResourceList, TextStyle } from '@shopify/polaris';
 import { Todo } from './types';
 
 interface Props {
   todos: Todo[];
+  toggleTodo: (id?: string) => void;
 }
 
-export const TodoList = ({ todos }: Props) => {
+export const TodoList = ({ todos, toggleTodo }: Props) => {
   return (
-    <List>
-      {todos.map((todo, i) => {
-        return <List.Item key={i}>{todo.title}</List.Item>;
-      })}
-    </List>
+    <ResourceList
+      items={todos}
+      renderItem={(todo) => {
+        const todoState = todo.completed ? 'negative' : undefined;
+
+        return (
+          <ResourceItem
+            id={todo.id}
+            onClick={() => {}}
+            shortcutActions={[
+              { content: 'Toggle', onAction: () => toggleTodo(todo.id) },
+            ]}
+          >
+            <h3>
+              <TextStyle variation={todoState}>{todo.title}</TextStyle>
+            </h3>
+          </ResourceItem>
+        );
+      }}
+    />
   );
 };

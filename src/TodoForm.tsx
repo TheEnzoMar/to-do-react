@@ -15,12 +15,15 @@ interface Props {
 
 export const TodoForm = ({ onSubmit }: Props) => {
   const [todo, setTodo] = useState<Todo>({
+    id: undefined,
     title: '',
+    completed: false,
   });
+
   const [showError, setShowError] = useState(false);
 
   const resetForm = () => {
-    setTodo({ title: '' });
+    setTodo({ title: '', completed: false });
     setShowError(false);
   };
 

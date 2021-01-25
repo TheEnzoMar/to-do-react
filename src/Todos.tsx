@@ -8,8 +8,33 @@ export const Todos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const createTodo = (todo: Todo) => {
-    const newToDos = [...todos, todo];
+    const nextId = new Date().getTime().toString();
+    const newToDos = [
+      ...todos,
+      {
+        ...todo,
+        id: nextId,
+      },
+    ];
+
     setTodos(newToDos);
+  };
+
+  const toggleTodo = (id?: string) => {
+    const newTodos = [...todos];
+
+    // find todo by id
+    const todo = newTodos.find(
+      (todo) => todo.id !== undefined && todo.id === id
+    );
+
+    // update todo (w. immutability)
+    if (todo) {
+      todo.completed = !todo.completed;
+    }
+
+    // set state
+    setTodos(newTodos);
   };
 
   return (
@@ -22,7 +47,7 @@ export const Todos = () => {
         </Layout.Section>
         <Layout.Section>
           <Card sectioned>
-            <TodoList todos={todos} />
+            <TodoList todos={todos} toggleTodo={toggleTodo} />
           </Card>
         </Layout.Section>
       </Layout>

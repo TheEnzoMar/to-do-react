@@ -24,6 +24,7 @@ ToDo Form
 ToDo List
 
 - [x] Render ToDo items
+- [ ] Add empty state
 - [ ] Persist ToDos (high)
   - [ ] Local
   - [ ] Cloud
