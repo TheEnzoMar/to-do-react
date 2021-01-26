@@ -19,6 +19,7 @@ export const Todos = () => {
   const newTodo = (todo: Todo) => {
     const newTodo = createTodo({
       id: new Date().getTime().toString(),
+      ...todo,
     });
 
     const newToDos = [...todos, newTodo];
