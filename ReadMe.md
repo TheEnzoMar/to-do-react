@@ -10,31 +10,31 @@ CRUD
 
 - [x] Create
 - [x] Read
-- [ ] Update
+- [x] Update
 - [ ] Delete
 
-ToDo Form
+Todo Form
 
-- [x] Validation ToDo
+- [x] Validation Todo
 - [x] Reset form
-- [ ] Load existing ToDo for updating
+- [x] Load existing Todo for updating
 - [ ] Field validation (low)
-- [ ] Reset form button (low)
+- [x] Reset form button (low)
 
-ToDo List
+Todo List
 
-- [x] Render ToDo items
+- [x] Render Todo items
 - [ ] Add empty state
 - [ ] Persist ToDos (high)
   - [ ] Local
   - [ ] Cloud
-- [ ] Mark ToDo as completed
-- [ ] Delete ToDo
-- [ ] Bulk delete ToDos from selection
+- [x] Mark Todo as completed
+- [ ] Delete Todo
+- [ ] Bulk delete Todos from selection
 
 ## Models
 
-## ToDo
+## Todo
 
 - title
 - description

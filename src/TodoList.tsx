@@ -1,23 +1,29 @@
 import React from 'react';
-import { ResourceItem, ResourceList, TextStyle } from '@shopify/polaris';
+import {
+  ResourceItem,
+  ResourceList,
+  TextContainer,
+  TextStyle,
+} from '@shopify/polaris';
 import { Todo } from './types';
 
 interface Props {
   todos: Todo[];
   toggleTodo: (id?: string) => void;
+  selectTodo: (todo: Todo) => void;
 }
 
-export const TodoList = ({ todos, toggleTodo }: Props) => {
+export const TodoList = ({ todos, toggleTodo, selectTodo }: Props) => {
   return (
     <ResourceList
       items={todos}
       renderItem={(todo) => {
-        const todoState = todo.completed ? 'negative' : undefined;
+        const todoState = todo.completed ? 'subdued' : undefined;
 
         return (
           <ResourceItem
             id={todo.id || ''}
-            onClick={() => {}}
+            onClick={() => selectTodo(todo)}
             shortcutActions={[
               { content: 'Toggle', onAction: () => toggleTodo(todo.id) },
             ]}
@@ -25,6 +31,7 @@ export const TodoList = ({ todos, toggleTodo }: Props) => {
             <h3>
               <TextStyle variation={todoState}>{todo.title}</TextStyle>
             </h3>
+            <TextContainer>{todo.description}</TextContainer>
           </ResourceItem>
         );
       }}
