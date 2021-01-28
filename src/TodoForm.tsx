@@ -14,24 +14,24 @@ import { createTodo } from './factory';
 interface Props {
   selectedTodo?: Todo;
   onSubmit: (todo: Todo) => void;
-  onClear: () => void;
 }
 
-export const TodoForm = ({ onSubmit, onClear, selectedTodo }: Props) => {
-  const [todo, setTodo] = useState<Todo>(createTodo());
+const intialTodoState = createTodo();
+
+export const TodoForm = ({ onSubmit, selectedTodo }: Props) => {
+  const [todo, setTodo] = useState<Todo>(intialTodoState);
   const [showError, setShowError] = useState(false);
 
   useEffect(() => {
     if (selectedTodo) {
       setTodo({ ...selectedTodo });
     } else {
-      setTodo(createTodo());
+      setTodo({ ...intialTodoState });
     }
   }, [selectedTodo]);
 
   const resetForm = () => {
-    setTodo(createTodo());
-    onClear();
+    setTodo({ ...intialTodoState });
     setShowError(false);
   };
 
@@ -40,7 +40,7 @@ export const TodoForm = ({ onSubmit, onClear, selectedTodo }: Props) => {
   };
 
   const submitActionText = todo.id ? 'Update' : 'Create';
-  const resetActionText = todo.id ? 'Cancel' : 'Reset';
+  const resetActionText = 'Cancel';
 
   return (
     <Form
@@ -53,7 +53,7 @@ export const TodoForm = ({ onSubmit, onClear, selectedTodo }: Props) => {
         }
 
         onSubmit(todo);
-        onClear();
+        resetForm();
       }}
     >
       <FormLayout>

@@ -3,10 +3,10 @@ import { Card, Layout, Page } from '@shopify/polaris';
 import { TodoForm } from './TodoForm';
 import { TodoList } from './TodoList';
 import { createTodo } from './factory';
-import { Todo } from './types';
+import { Optional, Todo } from './types';
 
 export const Todos = () => {
-  const [selectedTodo, setSelectedTodo] = useState<Todo | undefined>(undefined);
+  const [selectedTodo, setSelectedTodo] = useState<Optional<Todo>>(undefined);
   const [todos, setTodos] = useState<Todo[]>([
     createTodo({
       id: '1',
@@ -18,8 +18,8 @@ export const Todos = () => {
 
   const newTodo = (todo: Todo) => {
     const newTodo = createTodo({
-      id: new Date().getTime().toString(),
       ...todo,
+      id: new Date().getTime().toString(),
     });
 
     const newToDos = [...todos, newTodo];
@@ -34,6 +34,7 @@ export const Todos = () => {
     if (todoToUpdate) {
       Object.assign(todoToUpdate, todo);
       setTodos(newTodos);
+      setSelectedTodo(undefined);
     }
   };
 
@@ -70,10 +71,6 @@ export const Todos = () => {
     setSelectedTodo({ ...todo });
   };
 
-  const clearTodo = () => {
-    setSelectedTodo(undefined);
-  };
-
   return (
     <Page title="Todos">
       <Layout>
@@ -81,7 +78,6 @@ export const Todos = () => {
           <Card sectioned>
             <TodoForm
               selectedTodo={selectedTodo}
-              onClear={clearTodo}
               onSubmit={createOrUpdateTodo}
             />
           </Card>
