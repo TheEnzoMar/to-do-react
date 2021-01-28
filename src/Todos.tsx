@@ -71,6 +71,18 @@ export const Todos = () => {
     setSelectedTodo({ ...todo });
   };
 
+  const deleteTodo = (id?: string) => {
+    if(!id) {
+      return
+    }
+
+    const newTodos = [...todos];
+    const index = newTodos.findIndex(todo => todo.id === id);
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+    setSelectedTodo(undefined);
+  }
+
   return (
     <Page title="Todos">
       <Layout>
@@ -88,6 +100,7 @@ export const Todos = () => {
               todos={todos}
               toggleTodo={toggleTodo}
               selectTodo={selectTodo}
+              deleteTodo={deleteTodo}
             />
           </Card>
         </Layout.Section>
