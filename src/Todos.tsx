@@ -7,7 +7,8 @@ import { Optional, Todo } from './types';
 
 export const Todos = () => {
   const [selectedTodo, setSelectedTodo] = useState<Optional<Todo>>(undefined);
-  const [active, setActive] = useState(false);
+  const [activeModal, setActiveModal] = useState(false);
+  const [activeToast, setActiveToast] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([
     createTodo({
       id: '1',
@@ -82,8 +83,10 @@ export const Todos = () => {
     newTodos.splice(index, 1);
     setTodos(newTodos);
     setSelectedTodo(undefined);
-    const newActive = active;
-    setActive(!newActive);
+    const newActiveModal = activeModal;
+    setActiveModal(!newActiveModal);
+    const newActiveToast = activeToast;
+    setActiveToast(!newActiveToast);
   };
 
   return (
@@ -104,8 +107,10 @@ export const Todos = () => {
               toggleTodo={toggleTodo}
               selectTodo={selectTodo}
               deleteTodo={deleteTodo}
-              active={active}
-              setActive={setActive}
+              activeModal={activeModal}
+              setActiveModal={setActiveModal}
+              activeToast={activeToast}
+              setActiveToast={setActiveToast}
             />
           </Card>
         </Layout.Section>

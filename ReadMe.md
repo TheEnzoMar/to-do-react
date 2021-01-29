@@ -14,8 +14,8 @@ CRUD
 - [ ] Delete
   - [x] Create a delete button on the Todo item
   - [x] Remove Todo item from global state
-  - [ ] Confirm the deletion
-  - [ ] Show notification after deletion
+  - [x] Confirm the deletion
+  - [x] Show notification after deletion
 
 Todo Form
 
@@ -33,7 +33,7 @@ Todo List
   - [ ] Local
   - [ ] Cloud
 - [x] Mark Todo as completed
-- [ ] Delete Todo
+- [x] Delete Todo
 - [ ] Bulk delete Todos from selection
 
 ## Models

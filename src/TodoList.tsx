@@ -6,6 +6,8 @@ import {
   TextStyle,
   Button,
   Modal,
+  Frame,
+  Toast,
 } from '@shopify/polaris';
 import { Todo } from './types';
 
@@ -14,8 +16,10 @@ interface Props {
   toggleTodo: (id?: string) => void;
   selectTodo: (todo: Todo) => void;
   deleteTodo: (id?: string) => void;
-  active: boolean;
-  setActive: (active: boolean) => void;
+  activeModal: boolean;
+  setActiveModal: (active: boolean) => void;
+  activeToast: boolean;
+  setActiveToast: (activeToast: boolean) => void;
 }
 
 export const TodoList = ({
@@ -23,13 +27,22 @@ export const TodoList = ({
   toggleTodo,
   selectTodo,
   deleteTodo,
-  active,
-  setActive,
+  activeModal,
+  setActiveModal,
+  activeToast,
+  setActiveToast,
 }: Props) => {
   const toggleModal = () => {
-    setActive(!active);
+    setActiveModal(!activeModal);
   };
   const deleteTodoButton = <Button onClick={toggleModal}>Delete</Button>;
+
+  const toggleToast = () => {
+    setActiveToast(!activeToast);
+  };
+  const deleteToastMarkup = activeToast ? (
+    <Toast content="Message sent" onDismiss={toggleToast} />
+  ) : null;
 
   return (
     <ResourceList
@@ -39,34 +52,37 @@ export const TodoList = ({
 
         return (
           <>
-            <ResourceItem
-              id={todo.id || ''}
-              onClick={() => selectTodo(todo)}
-              shortcutActions={[
-                { content: 'Toggle', onAction: () => toggleTodo(todo.id) },
-              ]}
-            >
-              <h3>
-                <TextStyle variation={todoState}>{todo.title}</TextStyle>
-              </h3>
-              <TextContainer>{todo.description}</TextContainer>
-            </ResourceItem>
-            <Modal
-              activator={deleteTodoButton}
-              open={active}
-              onClose={toggleModal}
-              title="Are you sure you want to delete your todo item?"
-              primaryAction={{
-                content: 'Confirm Delete',
-                onAction: () => deleteTodo(todo.id),
-              }}
-              secondaryActions={[
-                {
-                  content: 'Cancel',
-                  onAction: toggleModal,
-                },
-              ]}
-            />
+            <Frame>
+              <ResourceItem
+                id={todo.id || ''}
+                onClick={() => selectTodo(todo)}
+                shortcutActions={[
+                  { content: 'Toggle', onAction: () => toggleTodo(todo.id) },
+                ]}
+              >
+                <h3>
+                  <TextStyle variation={todoState}>{todo.title}</TextStyle>
+                </h3>
+                <TextContainer>{todo.description}</TextContainer>
+              </ResourceItem>
+              <Modal
+                activator={deleteTodoButton}
+                open={activeModal}
+                onClose={toggleModal}
+                title="Are you sure you want to delete your todo item?"
+                primaryAction={{
+                  content: 'Confirm Delete',
+                  onAction: () => deleteTodo(todo.id),
+                }}
+                secondaryActions={[
+                  {
+                    content: 'Cancel',
+                    onAction: toggleModal,
+                  },
+                ]}
+              />
+              {deleteToastMarkup}
+            </Frame>
           </>
         );
       }}
