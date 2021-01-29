@@ -12,14 +12,10 @@ CRUD
 - [x] Read
 - [x] Update
 - [ ] Delete
-
-Delete Todo
-
-- [ ] Create a delete button on the Todo item
-- [ ] Remove Todo item from global state
-
-- [ ] Confirm the deletion
-- [ ] Show notification after deletion
+  - [x] Create a delete button on the Todo item
+  - [x] Remove Todo item from global state
+  - [ ] Confirm the deletion
+  - [ ] Show notification after deletion
 
 Todo Form
 

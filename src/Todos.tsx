@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, Layout, Page } from '@shopify/polaris';
 import { TodoForm } from './TodoForm';
 import { TodoList } from './TodoList';
@@ -7,6 +7,7 @@ import { Optional, Todo } from './types';
 
 export const Todos = () => {
   const [selectedTodo, setSelectedTodo] = useState<Optional<Todo>>(undefined);
+  const [active, setActive] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([
     createTodo({
       id: '1',
@@ -72,16 +73,18 @@ export const Todos = () => {
   };
 
   const deleteTodo = (id?: string) => {
-    if(!id) {
-      return
+    if (!id) {
+      return;
     }
 
     const newTodos = [...todos];
-    const index = newTodos.findIndex(todo => todo.id === id);
+    const index = newTodos.findIndex((todo) => todo.id === id);
     newTodos.splice(index, 1);
     setTodos(newTodos);
     setSelectedTodo(undefined);
-  }
+    const newActive = active;
+    setActive(!newActive);
+  };
 
   return (
     <Page title="Todos">
@@ -101,6 +104,8 @@ export const Todos = () => {
               toggleTodo={toggleTodo}
               selectTodo={selectTodo}
               deleteTodo={deleteTodo}
+              active={active}
+              setActive={setActive}
             />
           </Card>
         </Layout.Section>

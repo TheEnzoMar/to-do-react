@@ -5,6 +5,7 @@ import {
   TextContainer,
   TextStyle,
   Button,
+  Modal,
 } from '@shopify/polaris';
 import { Todo } from './types';
 
@@ -13,6 +14,8 @@ interface Props {
   toggleTodo: (id?: string) => void;
   selectTodo: (todo: Todo) => void;
   deleteTodo: (id?: string) => void;
+  active: boolean;
+  setActive: (active: boolean) => void;
 }
 
 export const TodoList = ({
@@ -20,7 +23,14 @@ export const TodoList = ({
   toggleTodo,
   selectTodo,
   deleteTodo,
+  active,
+  setActive,
 }: Props) => {
+  const toggleModal = () => {
+    setActive(!active);
+  };
+  const deleteTodoButton = <Button onClick={toggleModal}>Delete</Button>;
+
   return (
     <ResourceList
       items={todos}
@@ -41,7 +51,22 @@ export const TodoList = ({
               </h3>
               <TextContainer>{todo.description}</TextContainer>
             </ResourceItem>
-            <Button onClick={() => deleteTodo(todo.id)}>Delete</Button>
+            <Modal
+              activator={deleteTodoButton}
+              open={active}
+              onClose={toggleModal}
+              title="Are you sure you want to delete your todo item?"
+              primaryAction={{
+                content: 'Confirm Delete',
+                onAction: () => deleteTodo(todo.id),
+              }}
+              secondaryActions={[
+                {
+                  content: 'Cancel',
+                  onAction: toggleModal,
+                },
+              ]}
+            />
           </>
         );
       }}
