@@ -4,10 +4,19 @@ import { TodoForm } from './TodoForm';
 import { TodoList } from './TodoList';
 import { createTodo } from './factory';
 import { Optional, Todo } from './types';
+import { DeleteTodoModal } from './DeleteTodoModal';
+
+interface DeleteTodoModalState {
+  open: boolean;
+  todoId?: string;
+}
 
 export const Todos = () => {
   const [selectedTodo, setSelectedTodo] = useState<Optional<Todo>>(undefined);
-  const [activeModal, setActiveModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState<DeleteTodoModalState>({
+    open: false,
+    todoId: undefined,
+  });
   const [activeToast, setActiveToast] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([
     createTodo({
@@ -83,10 +92,16 @@ export const Todos = () => {
     newTodos.splice(index, 1);
     setTodos(newTodos);
     setSelectedTodo(undefined);
-    const newActiveModal = activeModal;
-    setActiveModal(!newActiveModal);
+    closeDeleteTodoModal();
     const newActiveToast = activeToast;
     setActiveToast(!newActiveToast);
+  };
+
+  const closeDeleteTodoModal = () => {
+    setDeleteModal({
+      open: false,
+      todoId: undefined,
+    });
   };
 
   return (
@@ -106,15 +121,24 @@ export const Todos = () => {
               todos={todos}
               toggleTodo={toggleTodo}
               selectTodo={selectTodo}
-              deleteTodo={deleteTodo}
-              activeModal={activeModal}
-              setActiveModal={setActiveModal}
+              onDeleteTodo={(id) => {
+                setDeleteModal({
+                  open: true,
+                  todoId: id,
+                });
+              }}
               activeToast={activeToast}
               setActiveToast={setActiveToast}
             />
           </Card>
         </Layout.Section>
       </Layout>
+      <DeleteTodoModal
+        open={deleteModal.open}
+        onClose={() => closeDeleteTodoModal()}
+        primaryAction={() => deleteTodo(deleteModal.todoId)}
+        secondaryAction={() => closeDeleteTodoModal()}
+      />
     </Page>
   );
 };
