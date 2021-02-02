@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { Card, Layout, Page } from '@shopify/polaris';
+import React, { useState } from 'react';
+import { Card, Layout, Page, Toast } from '@shopify/polaris';
 import { TodoForm } from './TodoForm';
 import { TodoList } from './TodoList';
 import { createTodo } from './factory';
@@ -8,24 +8,39 @@ import { DeleteTodoModal } from './DeleteTodoModal';
 
 interface DeleteTodoModalState {
   open: boolean;
-  todoId?: string;
+  todo?: Todo;
 }
+
+const initialTodos = [
+  createTodo({
+    id: new Date().getTime().toString(),
+    title: 'Think',
+    description: 'Think about the problem...',
+    completed: false,
+  }),
+  createTodo({
+    id: (new Date().getTime() + 2).toString(),
+    title: 'Explore',
+    description: 'Explore options...',
+    completed: false,
+  }),
+  createTodo({
+    id: (new Date().getTime() + 3).toString(),
+    title: 'Build',
+    description: 'Build it...',
+    completed: false,
+  }),
+];
 
 export const Todos = () => {
   const [selectedTodo, setSelectedTodo] = useState<Optional<Todo>>(undefined);
+  const [toastNotifications, setToastNotifications] = useState<string[]>([]);
   const [deleteModal, setDeleteModal] = useState<DeleteTodoModalState>({
     open: false,
-    todoId: undefined,
   });
-  const [activeToast, setActiveToast] = useState(false);
-  const [todos, setTodos] = useState<Todo[]>([
-    createTodo({
-      id: '1',
-      title: 'Create app',
-      description: 'Testing...',
-      completed: false,
-    }),
-  ]);
+  const [todos, setTodos] = useState<Todo[]>(initialTodos);
+
+  // state logic
 
   const newTodo = (todo: Todo) => {
     const newTodo = createTodo({
@@ -49,20 +64,20 @@ export const Todos = () => {
     }
   };
 
-  const toggleTodo = (id?: string) => {
+  const toggleTodo = (todo: Todo) => {
     const newTodos = [...todos];
 
     // find todo by id
-    const todo = newTodos.find(
-      (todo) => todo.id !== undefined && todo.id === id
+    const todoToUpdate = newTodos.find(
+      (t) => t.id !== undefined && t.id === todo.id
     );
 
     // update todo (w. immutability)
-    if (todo) {
-      todo.completed = !todo.completed;
+    if (todoToUpdate) {
+      todoToUpdate.completed = !todoToUpdate.completed;
 
-      if (selectedTodo?.id === todo.id) {
-        setSelectedTodo({ ...todo });
+      if (selectedTodo?.id === todoToUpdate.id) {
+        setSelectedTodo({ ...todoToUpdate });
       }
     }
 
@@ -82,26 +97,34 @@ export const Todos = () => {
     setSelectedTodo({ ...todo });
   };
 
-  const deleteTodo = (id?: string) => {
-    if (!id) {
+  const deleteTodo = (todo: Todo) => {
+    if (!todo.id) {
       return;
     }
 
     const newTodos = [...todos];
-    const index = newTodos.findIndex((todo) => todo.id === id);
+    const index = newTodos.findIndex((t) => t.id === todo.id);
     newTodos.splice(index, 1);
     setTodos(newTodos);
     setSelectedTodo(undefined);
     closeDeleteTodoModal();
-    const newActiveToast = activeToast;
-    setActiveToast(!newActiveToast);
+
+    setToastNotifications([...toastNotifications, todo.id]);
   };
 
   const closeDeleteTodoModal = () => {
     setDeleteModal({
       open: false,
-      todoId: undefined,
+      todo: undefined,
     });
+  };
+
+  const dismissNotification = (id: string) => {
+    const notifications = [...toastNotifications];
+    const index = notifications.indexOf(id);
+
+    notifications.splice(index, 1);
+    setToastNotifications(notifications);
   };
 
   return (
@@ -119,16 +142,16 @@ export const Todos = () => {
           <Card sectioned>
             <TodoList
               todos={todos}
-              toggleTodo={toggleTodo}
-              selectTodo={selectTodo}
-              onDeleteTodo={(id) => {
+              onSelectTodo={selectTodo}
+              onCompleted={(todo) => {
+                toggleTodo(todo);
+              }}
+              onDeleteTodo={(todo) => {
                 setDeleteModal({
                   open: true,
-                  todoId: id,
+                  todo: todo,
                 });
               }}
-              activeToast={activeToast}
-              setActiveToast={setActiveToast}
             />
           </Card>
         </Layout.Section>
@@ -136,9 +159,27 @@ export const Todos = () => {
       <DeleteTodoModal
         open={deleteModal.open}
         onClose={() => closeDeleteTodoModal()}
-        primaryAction={() => deleteTodo(deleteModal.todoId)}
+        primaryAction={() => {
+          if (deleteModal.todo) {
+            deleteTodo(deleteModal.todo);
+          }
+        }}
         secondaryAction={() => closeDeleteTodoModal()}
       />
+      {toastNotifications.map((id) => {
+        const removeToast = () => {
+          dismissNotification(id);
+        };
+
+        return (
+          <Toast
+            key={id}
+            content="Deleted Todo!"
+            duration={3000}
+            onDismiss={removeToast}
+          />
+        );
+      })}
     </Page>
   );
 };
