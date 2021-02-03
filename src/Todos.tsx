@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Card, Layout, Page } from '@shopify/polaris';
+import { Card, Layout, Page, Toast } from '@shopify/polaris';
 import { TodoForm } from './TodoForm';
 import { TodoList } from './TodoList';
 import { createTodo } from './factory';
@@ -11,21 +11,35 @@ interface DeleteTodoModalState {
   todoId?: string;
 }
 
+const initialTodos = [
+  createTodo({
+    id: new Date().getTime().toString(),
+    title: 'Think',
+    description: 'Think about the problem...',
+    completed: false,
+  }),
+  createTodo({
+    id: (new Date().getTime() + 2).toString(),
+    title: 'Explore',
+    description: 'Explore options...',
+    completed: false,
+  }),
+  createTodo({
+    id: (new Date().getTime() + 3).toString(),
+    title: 'Build',
+    description: 'Build it...',
+    completed: false,
+  }),
+];
+
 export const Todos = () => {
   const [selectedTodo, setSelectedTodo] = useState<Optional<Todo>>(undefined);
+  const [toastNotifications, setToastNotifications] = useState<string[]>([]);
   const [deleteModal, setDeleteModal] = useState<DeleteTodoModalState>({
     open: false,
     todoId: undefined,
   });
-  const [activeToast, setActiveToast] = useState(false);
-  const [todos, setTodos] = useState<Todo[]>([
-    createTodo({
-      id: '1',
-      title: 'Create app',
-      description: 'Testing...',
-      completed: false,
-    }),
-  ]);
+  const [todos, setTodos] = useState<Todo[]>(initialTodos);
 
   const newTodo = (todo: Todo) => {
     const newTodo = createTodo({
@@ -93,8 +107,8 @@ export const Todos = () => {
     setTodos(newTodos);
     setSelectedTodo(undefined);
     closeDeleteTodoModal();
-    const newActiveToast = activeToast;
-    setActiveToast(!newActiveToast);
+
+    setToastNotifications([...toastNotifications, id]);
   };
 
   const closeDeleteTodoModal = () => {
@@ -102,6 +116,14 @@ export const Todos = () => {
       open: false,
       todoId: undefined,
     });
+  };
+
+  const dismissNotification = (id: string) => {
+    const notifications = [...toastNotifications];
+    const index = notifications.indexOf(id);
+
+    notifications.splice(index, 1);
+    setToastNotifications(notifications);
   };
 
   return (
@@ -127,8 +149,6 @@ export const Todos = () => {
                   todoId: id,
                 });
               }}
-              activeToast={activeToast}
-              setActiveToast={setActiveToast}
             />
           </Card>
         </Layout.Section>
@@ -139,6 +159,20 @@ export const Todos = () => {
         primaryAction={() => deleteTodo(deleteModal.todoId)}
         secondaryAction={() => closeDeleteTodoModal()}
       />
+      {toastNotifications.map((id) => {
+        const removeToast = () => {
+          dismissNotification(id);
+        };
+
+        return (
+          <Toast
+            key={id}
+            content="Deleted Todo!"
+            duration={3000}
+            onDismiss={removeToast}
+          />
+        );
+      })}
     </Page>
   );
 };

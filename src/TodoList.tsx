@@ -16,8 +16,6 @@ interface Props {
   onDeleteTodo: (id?: string) => void;
   toggleTodo: (id?: string) => void;
   selectTodo: (todo: Todo) => void;
-  activeToast: boolean;
-  setActiveToast: (activeToast: boolean) => void;
 }
 
 export const TodoList = ({
@@ -25,17 +23,7 @@ export const TodoList = ({
   toggleTodo,
   selectTodo,
   onDeleteTodo,
-  activeToast,
-  setActiveToast,
 }: Props) => {
-  const toggleToast = () => {
-    setActiveToast(!activeToast);
-  };
-
-  const deleteToastMarkup = activeToast ? (
-    <Toast content="Message sent" onDismiss={toggleToast} />
-  ) : null;
-
   return (
     <ResourceList
       items={todos}
@@ -57,7 +45,6 @@ export const TodoList = ({
               <TextContainer>{todo.description}</TextContainer>
             </ResourceItem>
             <Button onClick={() => onDeleteTodo(todo.id)}>Delete</Button>
-            {deleteToastMarkup}
           </>
         );
       }}
