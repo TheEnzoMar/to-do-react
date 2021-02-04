@@ -5,6 +5,7 @@ import { TodoList } from './TodoList';
 import { createTodo } from './factory';
 import { Optional, Todo } from './types';
 import { DeleteTodoModal } from './DeleteTodoModal';
+import { useTodosState } from './hooks/useTodosState';
 
 interface DeleteTodoModalState {
   open: boolean;
@@ -33,82 +34,60 @@ const initialTodos = [
 ];
 
 export const Todos = () => {
+  const { todos, newTodo, updateTodo, deleteTodo } = useTodosState(
+    initialTodos
+  );
+
   const [selectedTodo, setSelectedTodo] = useState<Optional<Todo>>(undefined);
   const [toastNotifications, setToastNotifications] = useState<string[]>([]);
   const [deleteModal, setDeleteModal] = useState<DeleteTodoModalState>({
     open: false,
     todoId: undefined,
   });
-  const [todos, setTodos] = useState<Todo[]>(initialTodos);
 
-  const newTodo = (todo: Todo) => {
-    const newTodo = createTodo({
-      ...todo,
-      id: new Date().getTime().toString(),
-    });
-
-    const newToDos = [...todos, newTodo];
-
-    setTodos(newToDos);
-  };
-
-  const updateTodo = (todo: Todo) => {
-    const newTodos = [...todos];
-
-    let todoToUpdate = newTodos.find((t) => t.id === todo.id);
-    if (todoToUpdate) {
-      Object.assign(todoToUpdate, todo);
-      setTodos(newTodos);
-      setSelectedTodo(undefined);
-    }
-  };
-
-  const toggleTodo = (id?: string) => {
-    const newTodos = [...todos];
-
-    // find todo by id
-    const todo = newTodos.find(
-      (todo) => todo.id !== undefined && todo.id === id
-    );
-
-    // update todo (w. immutability)
-    if (todo) {
-      todo.completed = !todo.completed;
-
-      if (selectedTodo?.id === todo.id) {
-        setSelectedTodo({ ...todo });
+  const createOrUpdateTodo = async (todo: Todo) => {
+    if (todo.id === undefined) {
+      const { success } = await newTodo(todo);
+      if (success) {
+        return;
+      }
+    } else {
+      const { success } = await updateTodo(todo);
+      if (success) {
+        setSelectedTodo(undefined);
       }
     }
-
-    // set state
-    setTodos(newTodos);
   };
 
-  const createOrUpdateTodo = (todo: Todo) => {
-    if (todo.id === undefined) {
-      newTodo(todo);
-    }
+  const handleTodoDelete = async (todoId?: string) => {
+    try {
+      const { success, id } = await deleteTodo(todoId);
 
-    updateTodo(todo);
+      if (success) {
+        setSelectedTodo(undefined);
+        closeDeleteTodoModal();
+        setToastNotifications([...toastNotifications, id]);
+      }
+    } catch ({ success, error }) {
+      setSelectedTodo(undefined);
+      closeDeleteTodoModal();
+      console.log({ success, error });
+    }
   };
 
   const selectTodo = (todo: Todo) => {
     setSelectedTodo({ ...todo });
   };
 
-  const deleteTodo = (id?: string) => {
-    if (!id) {
+  const toggleTodo = (todoId?: string) => {
+    if (!todoId) {
       return;
     }
 
-    const newTodos = [...todos];
-    const index = newTodos.findIndex((todo) => todo.id === id);
-    newTodos.splice(index, 1);
-    setTodos(newTodos);
-    setSelectedTodo(undefined);
-    closeDeleteTodoModal();
-
-    setToastNotifications([...toastNotifications, id]);
+    const todo = todos.find((t) => t.id === todoId);
+    if (todo) {
+      updateTodo({ ...todo, completed: !todo?.completed });
+    }
   };
 
   const closeDeleteTodoModal = () => {
@@ -141,7 +120,7 @@ export const Todos = () => {
           <Card sectioned>
             <TodoList
               todos={todos}
-              toggleTodo={toggleTodo}
+              toggleTodo={(id) => toggleTodo(id)}
               selectTodo={selectTodo}
               onDeleteTodo={(id) => {
                 setDeleteModal({
@@ -156,7 +135,7 @@ export const Todos = () => {
       <DeleteTodoModal
         open={deleteModal.open}
         onClose={() => closeDeleteTodoModal()}
-        primaryAction={() => deleteTodo(deleteModal.todoId)}
+        primaryAction={() => handleTodoDelete(deleteModal.todoId)}
         secondaryAction={() => closeDeleteTodoModal()}
       />
       {toastNotifications.map((id) => {
