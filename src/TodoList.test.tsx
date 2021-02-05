@@ -1,11 +1,11 @@
 import React from 'react';
-import { mountWithPolaris } from './tests/mounts';
+import { mount } from './tests/mounts';
 import { noop } from './utilities';
 import { TodoList } from './TodoList';
 
 describe('<TodoList />', () => {
   it('renders without crashing', () => {
-    const wrapper = mountWithPolaris(
+    const wrapper = mount(
       <TodoList
         todos={[]}
         selectTodo={noop}
