@@ -31,9 +31,32 @@ describe('useTodosState', () => {
   });
 
   describe('updateTodo', () => {
-    it('udpates existing todo with new values', () => {});
+    it('updates existing todo with new values', () => {
+      const initialState = [
+        createTodo({ id: '1', title: 'Todo 1' }),
+        createTodo({ id: '2', title: 'Todo 2' }),
+      ];
 
-    it('rejects promise if Todo item is not found in state', () => {});
+      const wrapper = mount(<TestComponent initialState={initialState} />);
+
+      wrapper?.act(async () => {
+        const inner = wrapper.find(InnerComponent);
+        await inner?.props.updateTodo({ id: '2', title: 'Todo 2 updated' });
+      });
+
+      const inner = wrapper.find(InnerComponent);
+      expect(inner?.props.todos[1].title).toBe('Todo 2 updated');
+    });
+
+    it('rejects promise if Todo item is not found in state', async () => {
+      const wrapper = mount(<TestComponent />);
+      const inner = wrapper.find(InnerComponent);
+
+      await expect(inner?.props.updateTodo(undefined)).rejects.toEqual({
+        error: 'No Todo to update was found',
+        success: false,
+      });
+    });
   });
 
   describe('deleteTodo', () => {
