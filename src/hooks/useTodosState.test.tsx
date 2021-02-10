@@ -52,7 +52,7 @@ describe('useTodosState', () => {
       const wrapper = mount(<TestComponent />);
       const inner = wrapper.find(InnerComponent);
 
-      await expect(inner?.props.updateTodo(undefined)).rejects.toEqual({
+      await expect(inner?.props.updateTodo(createTodo())).rejects.toEqual({
         error: 'No Todo to update was found',
         success: false,
       });
