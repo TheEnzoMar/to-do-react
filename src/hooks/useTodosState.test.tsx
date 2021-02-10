@@ -1,8 +1,6 @@
-import React from 'react';
 import { renderHook, act } from '@testing-library/react-hooks';
 import { useTodosState } from './useTodosState';
 import { createTodo } from '../factory';
-import { Todo } from '../types';
 
 describe('useTodosState', () => {
   describe('newTodo', () => {
