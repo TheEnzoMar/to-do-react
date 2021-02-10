@@ -38,36 +38,36 @@ describe('<TodoForm />', () => {
   });
 
   it('resets form when Cancel button is clicked', () => {
-    const wrapper = mount(<TodoForm onSubmit={noop} />);
-    const cancelBtn = wrapper.find(Button, { children: 'Cancel' });
+    const root = mount(<TodoForm onSubmit={noop} />);
+    const cancelBtn = root.find(Button, { children: 'Cancel' });
 
-    wrapper
+    root
       .find(TextField, { label: 'Title' })
       ?.trigger('onChange', 'Sample Todo');
-    wrapper
+    root
       .find(TextField, { label: 'Description' })
       ?.trigger('onChange', 'This is a test...');
-    wrapper.find(Checkbox, { label: 'Completed' })?.trigger('onChange', true);
+    root.find(Checkbox, { label: 'Completed' })?.trigger('onChange', true);
 
-    expect(wrapper.find(TextField, { label: 'Title' })).toHaveReactProps({
+    expect(root.find(TextField, { label: 'Title' })).toHaveReactProps({
       value: 'Sample Todo',
     });
-    expect(wrapper.find(TextField, { label: 'Description' })).toHaveReactProps({
+    expect(root.find(TextField, { label: 'Description' })).toHaveReactProps({
       value: 'This is a test...',
     });
-    expect(wrapper.find(Checkbox, { label: 'Completed' })).toHaveReactProps({
+    expect(root.find(Checkbox, { label: 'Completed' })).toHaveReactProps({
       checked: true,
     });
 
     cancelBtn?.trigger('onClick');
 
-    expect(wrapper.find(TextField, { label: 'Title' })).toHaveReactProps({
+    expect(root.find(TextField, { label: 'Title' })).toHaveReactProps({
       value: '',
     });
-    expect(wrapper.find(TextField, { label: 'Description' })).toHaveReactProps({
+    expect(root.find(TextField, { label: 'Description' })).toHaveReactProps({
       value: undefined,
     });
-    expect(wrapper.find(Checkbox, { label: 'Completed' })).toHaveReactProps({
+    expect(root.find(Checkbox, { label: 'Completed' })).toHaveReactProps({
       checked: false,
     });
   });
