@@ -72,5 +72,63 @@ describe('<TodoForm />', () => {
     });
   });
 
-  it('loads exisitng Todo data in form', () => {});
+  it('sets internal todo state to default values if selectedTodo is undefined', () => {
+    const root = mount(<TodoForm onSubmit={noop} />);
+
+    expect(root.find(TextField, { label: 'Title' })).toHaveReactProps({
+      value: '',
+    });
+    expect(root.find(TextField, { label: 'Description' })).toHaveReactProps({
+      value: undefined,
+    });
+    expect(root.find(Checkbox, { label: 'Completed' })).toHaveReactProps({
+      checked: false
+    });
+  })
+
+  it('sets internal todo state to selectedTodo if defined', () => {
+    const existingTodo = createTodo({
+      id: '1',
+      title: 'Sample Todo',
+      description: 'This is a test...',
+      completed: true
+    });
+
+    const root = mount(<TodoForm onSubmit={noop} selectedTodo={existingTodo} />);
+
+    expect(root.find(TextField, { label: 'Title' })).toHaveReactProps({
+      value: existingTodo.title,
+    });
+    expect(root.find(TextField, { label: 'Description' })).toHaveReactProps({
+      value: existingTodo.description,
+    });
+    expect(root.find(Checkbox, { label: 'Completed' })).toHaveReactProps({
+      checked: existingTodo.completed,
+    });
+  });
+
+  it('displays the text "Create" when there is no todo id', () => {
+    const root = mount(<TodoForm onSubmit={noop} />);
+    const submitButton = root.find(Button, { submit: true })
+
+    expect(submitButton).toHaveReactProps({
+      children: 'Create'
+    });
+  })
+
+  fit('displays the text "Update" when there is a todo id', () => {
+    const existingTodo = createTodo({
+      id: "1",
+      title: 'Sample Todo',
+      description: 'This is a test...',
+      completed: true
+    });
+
+    const root = mount(<TodoForm onSubmit={noop} selectedTodo={existingTodo} />);
+    const submitButton = root.find(Button, { submit: true });
+
+    expect(submitButton).toHaveReactProps({
+      children: 'Update'
+    });
+  })
 });

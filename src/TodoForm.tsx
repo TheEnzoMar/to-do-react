@@ -21,7 +21,7 @@ const intialTodoState = createTodo();
 export const TodoForm = ({ onSubmit, selectedTodo }: Props) => {
   const [todo, setTodo] = useState<Todo>(intialTodoState);
   const [showError, setShowError] = useState(false);
-
+  
   useEffect(() => {
     if (selectedTodo) {
       setTodo({ ...selectedTodo });
