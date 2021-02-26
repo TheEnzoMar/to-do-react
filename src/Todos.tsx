@@ -12,28 +12,11 @@ interface DeleteTodoModalState {
   todoId?: string;
 }
 
-const initialTodos = [
-  createTodo({
-    id: new Date().getTime().toString(),
-    title: 'Think',
-    description: 'Think about the problem...',
-    completed: false,
-  }),
-  createTodo({
-    id: (new Date().getTime() + 2).toString(),
-    title: 'Explore',
-    description: 'Explore options...',
-    completed: false,
-  }),
-  createTodo({
-    id: (new Date().getTime() + 3).toString(),
-    title: 'Build',
-    description: 'Build it...',
-    completed: false,
-  }),
-];
+interface Props {
+  initialTodos: Todo[];
+}
 
-export const Todos = () => {
+export const Todos = ({ initialTodos }: Props) => {
   const { todos, newTodo, updateTodo, deleteTodo } = useTodosState(
     initialTodos
   );

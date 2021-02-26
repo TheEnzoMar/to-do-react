@@ -6,6 +6,7 @@ import {
   TextStyle,
 } from '@shopify/polaris';
 import { Todo } from './types';
+import { useTodosState } from './hooks/useTodosState';
 
 interface Props {
   todos: Todo[];

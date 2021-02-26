@@ -1,5 +1,6 @@
 import '@shopify/react-testing/matchers';
 import { destroyAll } from '@shopify/react-testing';
+import { noop } from './utilities';
 
 window.matchMedia =
   window.matchMedia ||
@@ -10,6 +11,8 @@ window.matchMedia =
       removeListener: function () {},
     };
   };
+
+global.scroll = noop;
 
 afterEach(() => {
   destroyAll();
