@@ -1,25 +1,20 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Card, Layout, Page, Toast } from '@shopify/polaris';
 import { TodoForm } from './TodoForm';
 import { TodoList } from './TodoList';
-import { createTodo } from './factory';
 import { Optional, Todo } from './types';
 import { DeleteTodoModal } from './DeleteTodoModal';
-import { useTodosState } from './hooks/useTodosState';
+import { useTodoContext } from './TodosContext';
 
 interface DeleteTodoModalState {
   open: boolean;
   todoId?: string;
 }
 
-interface Props {
-  initialTodos: Todo[];
-}
+interface Props {}
 
-export const Todos = ({ initialTodos }: Props) => {
-  const { todos, newTodo, updateTodo, deleteTodo } = useTodosState(
-    initialTodos
-  );
+export const Todos = ({}: Props) => {
+  const { todos, newTodo, updateTodo, deleteTodo } = useTodoContext();
 
   const [selectedTodo, setSelectedTodo] = useState<Optional<Todo>>(undefined);
   const [toastNotifications, setToastNotifications] = useState<string[]>([]);

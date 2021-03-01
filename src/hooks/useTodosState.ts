@@ -2,15 +2,15 @@ import { useState } from 'react';
 import { createTodo } from '../factory';
 import { Todo } from '../types';
 
-interface NewTodoPromise {
+export interface NewTodoPromise {
   success: boolean;
 }
 
-interface UpdateTodoPromise {
+export interface UpdateTodoPromise {
   success: boolean;
 }
 
-interface DeleteTodoPromise {
+export interface DeleteTodoPromise {
   success: boolean;
   id: string;
 }

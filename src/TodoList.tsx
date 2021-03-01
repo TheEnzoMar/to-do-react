@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   ResourceList,
   ResourceItem,
@@ -6,7 +6,6 @@ import {
   TextStyle,
 } from '@shopify/polaris';
 import { Todo } from './types';
-import { useTodosState } from './hooks/useTodosState';
 
 interface Props {
   todos: Todo[];

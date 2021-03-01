@@ -3,6 +3,7 @@ import enTranslations from '@shopify/polaris/locales/en.json';
 import { AppProvider, Frame } from '@shopify/polaris';
 import { Todos } from './Todos';
 import { createTodo } from './factory';
+import { TodosProvider } from './TodosProvider';
 
 const initialTodos = [
   createTodo({
@@ -29,7 +30,9 @@ export default function App() {
   return (
     <AppProvider i18n={enTranslations}>
       <Frame>
-        <Todos initialTodos={initialTodos} />
+        <TodosProvider initialTodos={initialTodos}>
+          <Todos />
+        </TodosProvider>
       </Frame>
     </AppProvider>
   );
